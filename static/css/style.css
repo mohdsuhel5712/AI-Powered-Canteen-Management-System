@@ -1,0 +1,13 @@
+.navbar{
+      background:  linear-gradient(45deg,rgba(255, 15, 15, 0.749),rgba(255, 132, 0, 0.89),rgba(246, 37, 37, 0.877));
+}
+.btn-success{
+      background: linear-gradient(45deg,rgb(20, 113, 180),#ff03c0);
+}
+.footer{
+   background:  linear-gradient(45deg,rgba(255, 15, 15, 0.749),rgba(255, 132, 0, 0.89),rgba(246, 37, 37, 0.877));
+   color: white;
+   align-items: center;
+   justify-content: center;
+   font-style: oblique;
+}

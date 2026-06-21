@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <title>Canteen Management System</title>
+
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+      <style>
+            body {
+                  background: #f4f4f4;
+            }
+
+            .food-card {
+                  transition: 0.3s;
+                  border-radius: 12px;
+                  overflow: hidden;
+            }
+
+            .food-card:hover {
+                  transform: scale(1.05);
+                  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            }
+
+            .card img {
+                  height: 200px;
+                  object-fit: cover;
+            }
+
+            .card-title {
+                  font-weight: bold;
+            }
+
+            .admin_phase a {
+                  font-size: 18px;
+                  text-decoration: none;
+                  color: aliceblue;
+            }
+
+            .sklearn {
+                  margin: 30px auto;
+                  align-items: center;
+                  justify-content: center;
+            }
+
+            .sklearn .col-md-6 {
+                  margin: 0px 0px;
+                  min-height: 250px;
+                  transition: all 0.5s;
+                  overflow: hidden;
+                  border-image-width: 100%;
+            }
+
+            .sklearn .col-md-6 .ai-image:hover {
+                  transform: scale(1.04);
+                  transition: all 0.5s;
+            }
+
+            .sklearn .col-md-6 .ai-image {
+                  width: 100%;
+                  height: 250px;
+                  object-fit: cover;
+                  transition: all 0.5s;
+            }
+
+            /* Dropdown container */
+
+
+            .dropdown .dropbtn {
+                  border: none;
+                  outline: none;
+                  color: white;
+                  padding: 0x 0px;
+                  margin-top: 8px;
+                  background-color: inherit;
+                  font-size: 16px;
+                  cursor: pointer;
+            }
+
+            .dropdown:hover .dropbtn {
+                  background-color: none;
+            }
+
+            /* Dropdown content */
+            .dropdown-content {
+                  display: none;
+                  position: absolute;
+                  background-color: #f9f9f9;
+                  min-width: 160px;
+                  border-radius: 10px;
+                  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+                  z-index: 1;
+            }
+
+            .dropdown-content a {
+                  float: none;
+                  color: black;
+                  padding: 12px 16px;
+                  display: block;
+                  text-align: left;
+                  text-decoration: none;
+                  transition: all 0.4s;
+            }
+
+            .dropdown-content a:hover {
+                  background: linear-gradient(45deg, rgba(255, 15, 15, 0.749), rgba(255, 132, 0, 0.89), rgba(246, 37, 37, 0.877));
+                  border-radius: 10px;
+                  color: #f4f4f4;
+                  transition: all 0.4s;
+            }
+
+            /* Show dropdown on hover */
+            .dropdown:hover .dropdown-content {
+                  display: block;
+            }
+      </style>
+
+</head>
+
+<body>
+
+      <!-- NAVBAR -->
+
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+            <div class="container">
+
+                  <a class="navbar-brand" href="/" data-aos="fade-right">🍴 Canteen System</a>
+
+                  <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu" data-aos="fade-left">
+                        <span class="navbar-toggler-icon"></span>
+                  </button>
+
+                  <div class="collapse navbar-collapse" id="menu" data-aos="fade-left">
+
+                        <ul class="navbar-nav me-auto">
+
+                              <li class="nav-item">
+                                    <a class="nav-link active" href="/">Home</a>
+                              </li>
+
+                              <li class="nav-item">
+                                    <div class="dropdown">
+                                          <button class="dropbtn">Orders ▼</button>
+
+                                          <div class="dropdown-content">
+                                                <a href="/admin_login">ADMIN</a>
+                                                <!-- <a href="#">User</a> -->
+                                          </div>
+                                    </div>
+                              </li>
+
+                        </ul>
+
+                        <form class="d-flex" action="/search" method="POST">
+
+                              <input type="text" class="form-control me-2" name="keyword" placeholder="Search food">
+
+                              <button type="submit" class="btn btn-success">Search</button>
+
+                        </form>
+                        <div class="mx-4 admin_phase" data-aos="flip-left">
+                              <a href="/register">Register</a>
+                              <!-- <a href="/login">login</a> -->
+                        </div>
+                  </div>
+
+            </div>
+
+      </nav>
+
+
+      <!-- sklearn prediction regarding the smart canteen system -->
+      <div class="container">
+            <div class="row sklearn">
+                  <div class="col-md-6">
+                        <a href="/ai-predict">
+                              <img class='ai-image' src="{{ url_for('static', filename='images/prediction.jpg') }}"
+                                    alt="">
+                        </a>
+                  </div>
+                  <div class="col-md-6">
+                        <a href="/top_item">
+                              <img class='ai-image' src="{{ url_for('static', filename='images/prediction2.jpg') }}"
+                                    alt="">
+                        </a>
+                  </div>
+            </div>
+      </div>
+
+
+      <!-- FOOD CARDS -->
+
+      <div class="container mt-4">
+            <div class="row">
+
+                  {% for food in foods %}
+
+                  <div class="col-md-4 mb-4" data-aos="flip-right" data-aos="zoom-out-up">
+
+                        <div class="card food-card shadow">
+
+                              <img src="{{ url_for('static', filename='images/' + food.name|lower|replace(' ','_') + '.jpg') }}"
+                                    class="card-img-top">
+
+                              <div class="card-body">
+
+                                    <h5 class="card-title">{{ food.name }}</h5>
+
+                                    <p class="card-text text-muted">
+                                          {{ food.description }}
+                                    </p>
+
+                                    <form action="{{ url_for('place_order', food_id=food.id) }}" method="POST">
+
+                                          <input type="number" name="quantity" class="form-control mb-2"
+                                                placeholder="Quantity" required>
+
+                                          <div class="d-flex justify-content-between align-items-center">
+
+                                                <h6 class="text-success">₹ {{ food.price }}</h6>
+
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                      Book Now
+                                                </button>
+
+                                          </div>
+
+                                    </form>
+
+                              </div>
+
+                        </div>
+
+                  </div>
+
+                  {% endfor %}
+
+            </div>
+      </div>
+
+      <!-- FOOTER -->
+
+      <div class="container-fluid py-4 px-5 footer">
+
+            <div class="row">
+                  <div class="col-sm-4" data-aos="zoom-out-up">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam quae, voluptate itaque cumque
+                        asperiores magnam unde animi, rerum modi provident, soluta at fugit repudiandae sed veritatis.
+                        Facilis earum rem voluptate!
+                  </div>
+                  <div class="col-sm-4" data-aos="zoom-out-up">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus pariatur itaque, magnam
+                        dolore exercitationem temporibus fuga libero ipsum nisi eligendi illum nesciunt saepe
+                        consequuntur maiores error neque earum. Dolorem, rem!
+                  </div>
+                  <div class="col-sm-4" data-aos="zoom-out-up">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eum maxime earum tempore soluta quidem
+                        aspernatur dolores quaerat quis? Soluta harum, cumque accusantium temporibus non recusandae est
+                        quibusdam esse adipisci ut.
+                  </div>
+            </div>
+
+      </div>
+
+</body>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+      AOS.init();
+</script>
+
+</html>

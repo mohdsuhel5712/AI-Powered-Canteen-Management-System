@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<style>
+  form button{
+    background: red;
+    color: beige;
+    border-radius: 10px;
+    border: none;
+    padding: 5px 10px ;
+  }
+</style>
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+<div class="container">
+
+<a class="navbar-brand" href="/">Canteen System</a>
+
+<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
+<span class="navbar-toggler-icon"></span>
+</button>
+
+<div class="collapse navbar-collapse" id="menu">
+
+<ul class="navbar-nav">
+
+<li class="nav-item">
+<a class="nav-link" href="/">Home</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link active" href="/admin">Admin</a>
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</nav>
+
+<!-- ADMIN DASHBOARD -->
+
+<div class="container mt-4">
+
+<h2 class="text-center mb-4">Admin Dashboard</h2>
+
+<table class="table table-bordered table-striped">
+
+<thead class="table-dark">
+
+<tr>
+
+<th>Order ID</th>
+<th>User</th>
+<th>Food Item</th>
+<th>Quantity</th>
+<th>Status</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for order in orders %}
+
+<tr>
+
+<td>{{order.id}}</td>
+<!-- <td>{{order.name}}</td>
+<td>{{order.food_name}}</td>
+<td>{{order.quantity}}</td>
+<td>{{order.status}}</td> -->
+
+<td>{{order.user}}</td>
+<td>{{order.food_item}}</td>
+<td>{{order.quantity}}</td>
+<td>{{order.status}}</td>
+
+<td>
+
+{% if order.status != 'completed' %}
+
+<a href="/complete/{{order.id}}" class="btn btn-success btn-sm">Complete</a>
+
+<!-- ✅ Delete Button -->
+
+  <form action="/delete" method="POST" style="display:inline-block;">
+    <input type="hidden" name="order_id" value="{{ order.id }}">
+    <button type="submit" >Delete</button>
+</form>
+
+
+{% else %}
+
+<span class="text-success">Completed</span>
+
+<!-- Optional: delete even after completed -->
+<a href="/delete/{{order.id}}" 
+   class="btn btn-danger btn-sm"
+   onclick="return confirm('Delete this completed order?')">
+   Delete
+</a>
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</body>
+</html>
